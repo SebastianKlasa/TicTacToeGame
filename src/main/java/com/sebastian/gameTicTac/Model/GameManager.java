@@ -1,22 +1,28 @@
 package com.sebastian.gameTicTac.Model;
 
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 @Component
 public class GameManager {
-    private static int maxGames = 100;
-    private static List<Game> games = new ArrayList<Game>();
+    private int maxGames = 100;
+    private List<Game> games = new ArrayList<Game>();
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
 
     public Game findGameById(String id){
         for(Game game: games){
-            if(id==game.getId()){
+            if(id.equals(game.getId())){
                 return game;
             }
         }
@@ -33,7 +39,16 @@ public class GameManager {
     }
 
     public void addGame(Game game){
-        games.add(game);
+        for(Game ativeGame: games){
+            if(MINUTES.between(ativeGame.getLastMoveTime(), LocalDateTime.now()) > 5){
+                games.remove(ativeGame);
+                System.out.println("gre usunięto z listy");
+            }
+        }
+        if(games.size()<100){
+            games.add(game);
+        }
+        System.out.println("ilosc gier: "+ games.size());
     }
 
     public String generateId(int len){
@@ -46,19 +61,19 @@ public class GameManager {
         return sb.toString();
     }
 
-    public static int getMaxGames() {
+    public int getMaxGames() {
         return maxGames;
     }
 
-    public static void setMaxGames(int maxGames) {
-        GameManager.maxGames = maxGames;
+    public void setMaxGames(int maxGames) {
+        this.maxGames = maxGames;
     }
 
-    public static List<Game> getGames() {
+    public List<Game> getGames() {
         return games;
     }
 
-    public static void setGames(List<Game> games) {
-        GameManager.games = games;
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 }

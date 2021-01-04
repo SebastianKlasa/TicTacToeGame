@@ -5,15 +5,20 @@ import com.sebastian.gameTicTac.Model.Player;
 import com.sebastian.gameTicTac.Service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -36,10 +41,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 //home
-                .antMatchers(HttpMethod.GET, "/").permitAll()//.hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/home").hasRole("USER")
                 //db console
                 .antMatchers(HttpMethod.POST, "/console").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/console").permitAll()//hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/console").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/console").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/console").hasRole("ADMIN")
                 //player api
@@ -49,13 +55,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/player").permitAll()//hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/player").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/player").hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll().and()
-                .csrf().disable();
+                //messeges
+                .antMatchers(HttpMethod.POST, "/game/id/{gameID}/drawOffer").permitAll()
+                .antMatchers(HttpMethod.POST, "/game/id/{gameID}/move").permitAll()
+                .antMatchers(HttpMethod.POST, "/player/reload/id/{id}").hasRole("USER")
+                //.antMatchers(HttpMethod., "/hello").permitAll()
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().permitAll().logoutSuccessUrl("/login")
+                .and().csrf().disable();
         http.headers().frameOptions().disable();
     }
 
@@ -68,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void addPredefinedAdminUser(){
         //admin player object
         Player admin = new Player("adminPlayer", passwordEncoder().encode("adminPassword"),
-                0, 0, 0, 0, 0, "ADMIN");
-       // playerDao.addPlayer(admin);
+                0, 0, 0, 0, 0, "ROLE_ADMIN");
+        //playerDao.addPlayer(admin);
     }
 }

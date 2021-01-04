@@ -14,6 +14,15 @@ public class Board {
 
     public Board() {
         this.board = new Content[sizeX][sizeY];
+        clearBoard();
+    }
+
+    public void clearBoard(){
+        for(int x = 0; x<sizeX;x++){
+            for(int y = 0; y<sizeY;y++){
+                board[x][y] = Content.EMPTY;
+            }
+        }
     }
 
     public static int getSizeX() {
@@ -40,6 +49,26 @@ public class Board {
         if(x>=0 && y>=0 && x<sizeX && y<sizeY){
             this.board[x][y] = c;
         }
+    }
+
+    public Content getSign(int x, int y){
+        if(x>=0 && y>=0 && x<sizeX && y<sizeY){
+            return this.board[x][y];
+        }
+        return null;
+    }
+
+    public void printContent(){
+        System.out.println("------------------------------------------");
+        for(int y = 0; y<sizeY;y++){
+            for(int x = 0; x<sizeX;x++){
+                if(board[x][y] == Content.EMPTY) System.out.print('.');
+                else if(board[x][y] == Content.CROSS) System.out.print('X');
+                else if(board[x][y] == Content.CIRCLE) System.out.print('O');
+            }
+            System.out.print('\n');
+        }
+        System.out.println("------------------------------------------");
     }
 
 }

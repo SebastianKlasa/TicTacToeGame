@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            var player = /*[[${#request.userPrincipal.principal}]]*/ null;
+            var game = /*[[${game}]]*/ null;
+            var id = /*[[${game.id}]]*/ null;
+            console.log("hello var");
+        /*]]>*/
+    </script>
+    <script type="text/javascript" th:src="@{/script.js}"></script>
+    <style>
+            .chess-board { border-spacing: 0; border-collapse: collapse; }
+            .chess-board th { padding: .5em; }
+            .chess-board td { border: 1px solid; width: 2em; height: 2em; }
+            .chess-board .light { background: #eee; }
+            .chess-board .dark { background: #000; }
+            .chess-board .cross { background-image: url("../../img/cross.png"); background-repeat:no-repeat; background-size:2em 2em; }
+            .chess-board .circle { background-image: url("../../img/circle.png"); background-repeat:no-repeat; background-size:2em 2em; }
+            .players-table td { border: 1px solid; }
+    </style>
 </head>
-<body>
-ggg
+
+<body onload="connect();onloadPutVariables();">
+<div class="userData" id="userData"></div>
+<h1>New game</h1>
+<h2>Game id: </h2>
+<span th:text="${game.id}" />
+<div class="playersContainer">
+    <span class="buttons-game" id="joinButtonContainer">
+        <button class="joinButton">Join the game</button>
+        <a href="/">Back</a>
+    </span>
+    <div class="roundData">
+        <h3 id="playerRound"></h3>
+        <p id="roundTimer"></p>
+    </div>
+    <table class="players-table">
+        <tr>
+            <th>Name</th>
+            <th>Games</th>
+            <th>Wins</th>
+            <th>Draws</th>
+            <th>Losts</th>
+            <th>Leave game</th>
+            <th>Admin actions</th>
+            <th>Draw</th>
+        </tr>
+        <tr>
+            <td id="player1">
+            </td>
+            <td id="player1games">
+            </td>
+            <td id="player1wins">
+            </td>
+            <td id="player1draws">
+            </td>
+            <td id="player1lost">
+            </td>
+            <td id="leaveGame1">
+            </td>
+            <td id="startGame1">
+            </td>
+            <td id="drawOffer1">
+            </td>
+        </tr>
+        <tr>
+            <td id="player2">
+            </td>
+            <td id="player2games">
+            </td>
+            <td id="player2wins">
+            </td>
+            <td id="player2draws">
+            </td>
+            <td id="player2lost">
+            </td>
+            <td id="leaveGame2">
+            </td>
+            <td id="kickPlayer2">
+            </td>
+            <td id="drawOffer2">
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="board">
+    <table class="chess-board" id="board">
+
+    </table>
+</div>
 </body>
 </html>

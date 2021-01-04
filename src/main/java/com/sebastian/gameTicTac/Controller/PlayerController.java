@@ -4,13 +4,12 @@ import com.sebastian.gameTicTac.Model.Player;
 import com.sebastian.gameTicTac.Model.PlayerDto;
 import com.sebastian.gameTicTac.Service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
@@ -23,15 +22,6 @@ public class PlayerController {
     public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
     }
-
-//    @PostMapping("/player")
-//    public RedirectView addPlayer(@ModelAttribute("player") @Valid PlayerDto playerDto,
-//                                  HttpServletRequest request, Errors errors){
-//        if(playerService.addPlayer(playerDto)){
-//            return new RedirectView("/login");
-//        }
-//        else return new RedirectView("/player/registration");
-//    }
 
     @PostMapping("/player/registration")
     public ModelAndView addPlayer(@ModelAttribute("player") @Valid PlayerDto playerDto, Errors errors,
@@ -56,6 +46,7 @@ public class PlayerController {
     public List<Player> getAllPlayers(){
         return playerService.getAllPlayers();
     }
+
     @PutMapping("/player")
     public void updatePlayer(@RequestBody Player player){
         playerService.updatePlayer(player);
@@ -65,4 +56,11 @@ public class PlayerController {
     public void deletePlayer(@PathVariable int id){
         playerService.deletePlayer(id);
     }
+
+    @GetMapping("/player/reload/id/{id}")
+    public Player reloadUserData(@PathVariable int id, HttpServletRequest req){
+        Player player = playerService.getPlayerById(id);
+        return player;
+    }
+
 }

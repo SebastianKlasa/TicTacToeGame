@@ -1,5 +1,6 @@
 package com.sebastian.gameTicTac.Model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +34,18 @@ public class Player implements UserDetails {
     private String role;
 
     public Player() {
+    }
+
+    public Player(int id, String name, String password, int games, int wins, int draw, int lost, int ended, String role) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.games = games;
+        this.wins = wins;
+        this.draw = draw;
+        this.lost = lost;
+        this.ended = ended;
+        this.role = role;
     }
 
     public Player(String name, String password, int games, int wins, int draw, int lost, int ended, String role) {
@@ -119,6 +132,7 @@ public class Player implements UserDetails {
         this.password = password;
     }
 
+    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(role));
