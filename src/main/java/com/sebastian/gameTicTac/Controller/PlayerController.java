@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,12 +25,28 @@ public class PlayerController {
     }
 
     @PostMapping("/player/registration")
-    public ModelAndView addPlayer(@ModelAttribute("player") @Valid PlayerDto playerDto, Errors errors,
+    public ModelAndView addPlayer(@ModelAttribute("player") @Valid PlayerDto player, Errors errors,
                                   HttpServletRequest request){
-        if(playerService.addPlayer(playerDto)){
-            return new ModelAndView("home");
+        String message = playerService.addPlayer(player);
+        if(message.equals("true")){
+            return new ModelAndView("login");
         }
-        else return new ModelAndView("registration");
+        else{
+            ModelAndView mav = new ModelAndView("registration");
+            mav.addObject("errorpassword", "");
+            mav.addObject("errorname", "");
+            if(!message.equals("false")){
+                if(message.equals("Password not match")) {
+                    mav.addObject("errorname", "");
+                    mav.addObject("errorpassword", message);
+                }
+                if(message.equals("Player exists")) {
+                    mav.addObject("errorname", message);
+                    mav.addObject("errorpassword", "");
+                }
+            }
+            return mav;
+        }
     }
 
     @GetMapping("/player/id/{id}")

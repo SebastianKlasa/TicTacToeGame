@@ -2,12 +2,18 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
     <title>Error</title>
+	<link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<h1>Something went wrong!</h1>
-<span class="error-message" th:text="${message}" />
-<a href="/">Back</a>
+	<div class="error-container">
+		<h1>Something went wrong!</h1>
+        <div class="center">
+			<span class="error-message" th:text="${message}" />
+			<a href="/">Back</a>
+        </div>
+	</div>
 </body>
 </html>

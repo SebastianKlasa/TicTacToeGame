@@ -7,12 +7,15 @@ import javax.validation.constraints.NotEmpty;
 public class PlayerDto {
 
     @NotNull
-    @NotEmpty(message = "empty wartosc")
+    @NotEmpty(message = "Name can not be blank")
     private String name;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Password can not be blank")
     private String password;
+
+    @NotNull
+    @NotEmpty(message = "Password can not be blank")
     private String matchingPassword;
 
     public PlayerDto() {

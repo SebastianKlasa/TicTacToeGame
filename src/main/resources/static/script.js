@@ -167,7 +167,7 @@
                sendIdToUpdateGameObject();
            }
         });
-        isCheckGameover = true;
+//        isCheckGameover = true;
     });
 
     var stompClient = null;
@@ -178,10 +178,12 @@
         stompClient.connect({}, function (frame) {
             stompClient.subscribe('/topic/gameMessageReceiver/'+id, function (gameMessage) {
                 game = JSON.parse(gameMessage.body);
+                checkGameOver();
                 PutPlayers();
                 drawBoard();
                 startGame();
-                checkGameOver();
+                console.log("________sprawdzam!____________");
+                console.log(game);
             });
         });
     }
@@ -193,12 +195,16 @@
                 clearTimeout(timerId);
                 loadUser();
                 isCheckGameover = false;
+                document.getElementById("winner-header").innerHTML = "Draw!";
+                document.getElementById("winner-label").style.display = "flex";
             }
             if(game.winner != null){
                 console.log("winner!!!!!!!!!!!!!!!!!!! : " + game.winner.name);
                 clearTimeout(timerId);
                 loadUser();
                 isCheckGameover = false;
+                document.getElementById("winner-header").innerHTML = "Winner is: " + game.winner.name + "!";
+                document.getElementById("winner-label").style.display = "flex";
             }
         }
     }
@@ -215,12 +221,12 @@
                player = data;
                console.log("x???x");
                console.log(player);
+               document.getElementById("userData").innerHTML = '<p>name : '+player.name+" </p><p>games : "+player.games+" </p><p>wins : "+
+               player.wins+" </p><p>draws : "+player.draw+" </p><p>loses : "+player.lost+'</p>';
+               document.getElementById("userData").innerHTML +=
+               '<a class="logoutButton" href="/logout">Logout</a>'
            }
         });
-        document.getElementById("userData").innerHTML += 'name='+player.name+" games="+player.games+" wins="+
-        player.wins+" draws="+player.draw+" loses="+player.lost;
-        document.getElementById("userData").innerHTML +=
-        '<a class="logoutButton" href="/logout">"Logout</a>'
     }
 
     function sendIdToUpdateGameObject() {
@@ -288,6 +294,7 @@
             timeLeft = 30;
             clearTimeout(timerId);
             timerId = setInterval(countdown, 1000);
+            isCheckGameover = true;
         }
     }
 
@@ -366,4 +373,8 @@
                }
             });
         }
+    });
+
+    $("button.playAgainButton").live("click", function(){
+        document.getElementById("winner-label").style.display = "none";
     });

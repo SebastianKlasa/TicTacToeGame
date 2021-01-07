@@ -5,17 +5,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManagerFactory;
-import java.io.Console;
-import java.security.Principal;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -34,7 +28,9 @@ public class PlayerDao {
      * This method is used to put new Player record into database
      * @param player is a POJO object that will be put into database
      */
+    @Transactional
     public void addPlayer(Player player){
+        System.out.println("xd add");
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         try {
@@ -55,13 +51,16 @@ public class PlayerDao {
      * @param id is am id of the Player object
      * @return
      */
+    @Transactional
     public Player getPlayerById(int id){
+        System.out.println("xd gbid");
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         Player player = null;
         try {
             tx = session.beginTransaction();
             player =  (Player) session.get(Player.class, id);
+            tx.commit();
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();
@@ -71,7 +70,9 @@ public class PlayerDao {
         return player;
     }
 
+    @Transactional
     public Player getPlayerByName(String name){
+        System.out.println("xd gbn");
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         Player player = null;
@@ -85,6 +86,7 @@ public class PlayerDao {
             if(results.size()>0){
                 player = results.get(0);
             }
+            tx.commit();
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();
@@ -94,7 +96,9 @@ public class PlayerDao {
         return player;
     }
 
+    @Transactional
     public List<Player> getAllPlayers(){
+        System.out.println("xd gall");
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         List players = null;
@@ -111,7 +115,9 @@ public class PlayerDao {
         return players;
     }
 
+    @Transactional
     public void updatePlayer(Player player){
+        System.out.println("xd upd");
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         try {
@@ -127,7 +133,9 @@ public class PlayerDao {
     }
 
 
+    @Transactional
     public void deletePlayer(int id){
+        System.out.println("xd del");
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         try {

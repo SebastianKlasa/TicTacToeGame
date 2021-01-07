@@ -42,14 +42,15 @@ public class PlayerService implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
-    public boolean addPlayer(PlayerDto playerDto){
+    public String addPlayer(PlayerDto playerDto){
         Player player = new Player(playerDto.getName(), passwordEncoder().encode(playerDto.getPassword()),
                 0, 0, 0, 0, 0, "ROLE_USER");
-        if(playerValidate(playerDto)){
+        String message = playerValidate(playerDto);
+        if(message.equals("true")){
             playerDao.addPlayer(player);
-            return true;
+            return "true";
         }
-        else return false;
+        else return message;
     }
 
     public void updatePlayer(Player player){
@@ -70,13 +71,13 @@ public class PlayerService implements UserDetailsService {
         }
     }
 
-    private boolean playerValidate(PlayerDto playerDto){
-        if(playerDto.getName()==null || playerDto.getName()=="") return false;
-        if(playerDto.getPassword()==null || playerDto.getPassword()=="") return false;
-        if(!playerDto.getPassword().equals(playerDto.getMatchingPassword())) return false;
-        if(playerExists(playerDto.getName())) return false;
+    private String playerValidate(PlayerDto playerDto){
+        if(playerDto.getName()==null || playerDto.getName()=="") return "false";
+        if(playerDto.getPassword()==null || playerDto.getPassword()=="") return "false";
+        if(!playerDto.getPassword().equals(playerDto.getMatchingPassword())) return "Password not match";
+        if(playerExists(playerDto.getName())) return "Player exists";
 
-        return true;
+        return "true";
     }
 
 }

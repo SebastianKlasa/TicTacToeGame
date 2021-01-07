@@ -17,7 +17,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 public class GameManager {
     private int maxGames = 100;
     private List<Game> games = new ArrayList<Game>();
-    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static final String AB = "abcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
 
     public Game findGameById(String id){
