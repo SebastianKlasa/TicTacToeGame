@@ -2,6 +2,8 @@
     var timerId;
     var isCheckGameover = false;
 
+    var endpoint = "https://ticacame.herokuapp.com";
+
     console.log("hello");
 
     function onloadPutVariables(){
@@ -136,7 +138,7 @@
     $("button.joinButton").live("click", function(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id,
+           url: endpoint+"/game/id/"+id,
            data: JSON.stringify(player),
            dataType: 'json',
            contentType: "application/json",
@@ -149,7 +151,7 @@
     $("button.leaveButton").live("click", function(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id+"/leaveGame",
+           url: endpoint+"/game/id/"+id+"/leaveGame",
            data: JSON.stringify(player),
            dataType: 'json',
            contentType: "application/json",
@@ -162,7 +164,7 @@
     $("button.startButton").live("click", function(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id+"/startGame",
+           url: endpoint+"/game/id/"+id+"/startGame",
            success: function () {
                sendIdToUpdateGameObject();
            }
@@ -213,7 +215,7 @@
         var myUser;
         $.ajax({
            type: "GET",
-           url: "http://localhost:8090/player/reload/id/"+player.id,
+           url: endpoint+"/player/reload/id/"+player.id,
            data: myUser,
            dataType: 'json',
            contentType: "application/json",
@@ -272,7 +274,7 @@
             console.log(move);
             $.ajax({
                type: "POST",
-               url: "http://localhost:8090/game/id/"+id+"/move",
+               url: endpoint+"/game/id/"+id+"/move",
                data: JSON.stringify(move),
                dataType: 'json',
                contentType: "application/json",
@@ -301,7 +303,7 @@
     function checkWinner(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id+"/checkWinner",
+           url: endpoint+"/game/id/"+id+"/checkWinner",
            success: function () {
                sendIdToUpdateGameObject();
            }
@@ -311,7 +313,7 @@
     $("button.kickPlayer").live("click", function(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id+"/kickPlayer",
+           url: endpoint+"/game/id/"+id+"/kickPlayer",
            success: function () {
                sendIdToUpdateGameObject();
            }
@@ -321,7 +323,7 @@
     $("button.logout").live("click", function(){
             $.ajax({
                type: "GET",
-               url: "http://localhost:8090/login?logout"
+               url: endpoint+"/login?logout"
             });
         });
 
@@ -338,7 +340,7 @@
     function changePlayerRound(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id+"/changePlayerRound",
+           url: endpoint+"/game/id/"+id+"/changePlayerRound",
            success: function () {
                sendIdToUpdateGameObject();
                timeLeft = 30;
@@ -351,7 +353,7 @@
     $("button.drawOffer").live("click", function(){
         $.ajax({
            type: "POST",
-           url: "http://localhost:8090/game/id/"+id+"/drawOffer",
+           url: endpoint+"/game/id/"+id+"/drawOffer",
            data: JSON.stringify(player),
            dataType: 'json',
            contentType: "application/json",
@@ -367,9 +369,9 @@
         if(id != null && id != ""){
             $.ajax({
                type: "GET",
-               url: "http://localhost:8090/game/id/"+id,
+               url: endpoint+"/game/id/"+id,
                success: function (data) {
-                  window.location.href = "http://localhost:8090/game/id/"+id;
+                  window.location.href = endpoint+"/game/id/"+id;
                }
             });
         }
@@ -377,4 +379,16 @@
 
     $("button.playAgainButton").live("click", function(){
         document.getElementById("winner-label").style.display = "none";
+    });
+
+    $("button.newGameButton").live("click", function(){
+        $.ajax({
+           type: "GET",
+           url: endpoint+"/game",
+           dataType: 'text',
+           contentType: "application/json",
+           success: function (data) {
+                window.location.href = endpoint+"/game/id/"+data;
+             }
+           });
     });
