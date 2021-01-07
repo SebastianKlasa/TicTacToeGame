@@ -2,7 +2,7 @@
     var timerId;
     var isCheckGameover = false;
 
-    var endpoint = "https://ticacame.herokuapp.com";
+    var endpoint = "https://localhost:8090";
 
     console.log("hello");
 

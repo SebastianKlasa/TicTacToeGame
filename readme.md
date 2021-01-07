@@ -1,33 +1,39 @@
-# Prison Database Manager
+# TicTac Game
 
 ## General information
-PrisonDatabaseManager
+Game 
 
 ### Description:
-Application designed to managing prison database. This application has limited functionality. It lets to managing prison cells and sectors.
+Classic tic tac game with board 20x20. Victory condition:
+- 5 signs horizontally
+- 5 signs vertical
+- 5 signs diagonally
+Both players have 30s. to move.
 
 #### Database
-Catalog 'database' contain database scheme and example data.
-To start the application you have to create database before and edit 'persistence.xml' file, add correct:
-- jdbc.url
-- jdbc.user
-- jdbc.password
-
-#### Tests
-Application has tests that has to be passed to build project.
+Database created with Hibernate framework.
+In application is used H2 database.
 
 ### Features
-- view sectors list
-- view cells list inside chosen sector
-- add new cell/sector
-- delete cell/sector (when you delete cell you delete also all cells inside)
+- log in
+- register new user
+- create new game 
+- join created game
+- play the game (make move)
+- finish game with draw
 
 ### Technologies
 - Java 8
-- JavaFX
-- JPA
+- Spring Boot
+- Spring Security
+- Thymaleaf
+- Hibernate
 - SQL
-- MySQL
+- H2
+- Html
+- CSS
+- Javaspcript
+- ajax
 
 ## Setup
 Requirements:
@@ -39,7 +45,7 @@ To build this project locally open project directory and run:
 ```
 mvn package
 ```
-To run program from Command Prompt run follow: 
+To run program from Command Prompt run follow (default program will run at port 8090): 
 ```
-java -jar target/prisonDBApp-1.0-SNAPSHOT.jar
+java -jar target/gameTicTac-0.0.1-SNAPSHOT.jar
 ```
