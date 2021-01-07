@@ -74,8 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @EventListener(ApplicationReadyEvent.class)
     public void addPredefinedAdminUser(){
         //admin player object
-        Player admin = new Player("adminPlayer", passwordEncoder().encode("adminPassword"),
+        Player admin = new Player("adminPlayer1", passwordEncoder().encode("admin123"),
                 0, 0, 0, 0, 0, "ROLE_ADMIN");
-        //playerDao.addPlayer(admin);
+        playerDao.addPlayer(admin);
     }
 }
