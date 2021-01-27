@@ -2,7 +2,8 @@
     var timerId;
     var isCheckGameover = false;
 
-    var endpoint = "https://localhost:8090";
+    //var endpoint = "https://localhost:8090";
+	var endpoint = window.location.protocol + "//" + window.location.host.split('/')[0];
 
     console.log("hello");
 
